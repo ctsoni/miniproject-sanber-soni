@@ -12,6 +12,7 @@ import (
 	"miniproject-sanber-soni/middleware"
 	"miniproject-sanber-soni/repository"
 	"miniproject-sanber-soni/service"
+	"os"
 )
 
 var (
@@ -25,11 +26,11 @@ func main() {
 		log.Fatal(err)
 	}
 	psqlInfo := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=disable",
-		"localhost",
-		5432,
-		"postgres",
-		"postgres",
-		"miniproject")
+		os.Getenv("PGHOST"),
+		os.Getenv("PGPORT"),
+		os.Getenv("PGUSER"),
+		os.Getenv("PGPASSWORD"),
+		os.Getenv("PGDATABASE"))
 
 	db, err = sql.Open("postgres", psqlInfo)
 	err = db.Ping()
@@ -73,5 +74,5 @@ func main() {
 	book.PUT("/:id", middleware.BasicAuth, bookHandler.UpdateBook)
 	book.DELETE("/:id", bookHandler.DeleteBook)
 
-	r.Run()
+	r.Run(":" + os.Getenv("PORT"))
 }
