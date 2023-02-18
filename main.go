@@ -72,7 +72,7 @@ func main() {
 	book.GET("", bookHandler.GetBook)
 	book.POST("", middleware.BasicAuth, bookHandler.InsertBook)
 	book.PUT("/:id", middleware.BasicAuth, bookHandler.UpdateBook)
-	book.DELETE("/:id", bookHandler.DeleteBook)
+	book.DELETE("/:id", middleware.BasicAuth, bookHandler.DeleteBook)
 
 	r.Run(":" + os.Getenv("PORT"))
 }
